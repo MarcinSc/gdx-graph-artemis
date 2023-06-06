@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        google()
+    }
+    dependencies {
+        classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    }
+}
+
+apply plugin: "java"
+apply plugin: "java-library"
+apply plugin: "maven-publish"
+apply plugin: "eclipse"
+
+sourceCompatibility = 1.7
+
+group = "com.gempukku.libgdx.gdx-graph-artemis"
+version = "$gdxGraphArtemisVersion"
+
+eclipse.project.name = "gdx-graph-artemis"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    google()
+    gradlePluginPortal()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
+    implementation "com.github.MarcinSc.gdx-graph:gdx-graph-shader-util:$gdxGraphVersion"
+    implementation "com.github.MarcinSc.gdx-graph:gdx-graph-lighting3d:$gdxGraphVersion"
+    implementation "com.github.MarcinSc.gdx-graph:gdx-graph-ui:$gdxGraphVersion"
+    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
+}
+
+sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.main.resources.srcDirs = ["resources/"]
+sourceSets.test.java.srcDirs = ["test/"]
+sourceSets.test.resources.srcDirs = ["test-resources/"]
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+            from components.java
+        }
+    }
+}
